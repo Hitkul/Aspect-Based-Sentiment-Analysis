@@ -42,23 +42,35 @@ labels = FiQA_labels+senti140_test_labels+senti140_train_labels
 def shuffle_data(sentences,labels):
     numbers = [i for i in range(len(sentences))]
     shuffle(numbers)
-    temp_text = sentences
-    temp_labels = labels
+    temp_text = []
+    temp_labels = []
     for i in numbers:
-        sentences[i] = temp_text[i]
-        labels[i]=temp_labels[i]
-    print(len(sentences))
-    print(len(labels))
-    return sentences,labels
+        temp_text.append(sentences[i])
+        temp_labels.append(labels[i])
+    return temp_text,temp_labels
+
+
 sentences,labels = shuffle_data(sentences,labels)
+
+# print(labels.count(0))
+# print(labels.count(1))
+
 train_sentences,dev_sentences,test_sentences = sentences[:int(len(sentences)*0.98)],sentences[int(len(sentences)*0.98):int(len(sentences)*0.99)],sentences[int(len(sentences)*0.99):]
 train_labels,dev_labels,test_labels = labels[:int(len(labels)*0.98)],labels[int(len(labels)*0.98):int(len(labels)*0.99)],labels[int(len(labels)*0.99):]
-print(len(train_sentences),' ',len(dev_sentences),' ',len(test_sentences))
-print(len(train_labels),' ',len(dev_labels),' ',len(test_labels))
-print('writing file')
-with open('dataset/test.csv', 'w', newline='') as csvfile:
-    spamwriter = csv.writer(csvfile, delimiter=',',
-                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    for i in zip(sentences,labels):
-        spamwriter.writerow(i)
+
+# print(train_labels.count(0),dev_labels.count(0),test_labels.count(0))
+# print(train_labels.count(1),dev_labels.count(1),test_labels.count(1))
+
+
+def write_to_file(filename,l1,l2):
+    print('writing ',filename)
+    with open('dataset/'+filename, 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=',',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for i in zip(l1,l2):
+            spamwriter.writerow(i)
+write_to_file('final_train.csv',train_sentences,train_labels)
+write_to_file('final_dev.csv',dev_sentences,dev_labels)
+write_to_file('final_test.csv',test_sentences,test_labels)
+
 
