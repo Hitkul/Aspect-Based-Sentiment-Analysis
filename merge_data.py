@@ -51,3 +51,14 @@ def shuffle_data(sentences,labels):
     print(len(labels))
     return sentences,labels
 sentences,labels = shuffle_data(sentences,labels)
+train_sentences,dev_sentences,test_sentences = sentences[:int(len(sentences)*0.98)],sentences[int(len(sentences)*0.98):int(len(sentences)*0.99)],sentences[int(len(sentences)*0.99):]
+train_labels,dev_labels,test_labels = labels[:int(len(labels)*0.98)],labels[int(len(labels)*0.98):int(len(labels)*0.99)],labels[int(len(labels)*0.99):]
+print(len(train_sentences),' ',len(dev_sentences),' ',len(test_sentences))
+print(len(train_labels),' ',len(dev_labels),' ',len(test_labels))
+print('writing file')
+with open('dataset/test.csv', 'w', newline='') as csvfile:
+    spamwriter = csv.writer(csvfile, delimiter=',',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    for i in zip(sentences,labels):
+        spamwriter.writerow(i)
+
