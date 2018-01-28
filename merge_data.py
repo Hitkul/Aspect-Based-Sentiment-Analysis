@@ -36,8 +36,6 @@ senti140_train_sentences,senti140_train_labels = load_data_from_csv('dataset/tra
 senti140_test_labels = [1 if x == 4 else 0 for x in senti140_test_labels]
 senti140_train_labels = [1 if x == 4 else 0 for x in senti140_train_labels]
 
-sentences = FiQA_sentences+senti140_test_sentences+senti140_train_sentences
-labels = FiQA_labels+senti140_test_labels+senti140_train_labels
 
 def shuffle_data(sentences,labels):
     numbers = [i for i in range(len(sentences))]
@@ -49,17 +47,36 @@ def shuffle_data(sentences,labels):
         temp_labels.append(labels[i])
     return temp_text,temp_labels
 
+sentences = senti140_test_sentences+senti140_train_sentences
+labels = senti140_test_labels+senti140_train_labels
 
 sentences,labels = shuffle_data(sentences,labels)
 
-# print(labels.count(0))
-# print(labels.count(1))
+sentences = sentences[:10000]
+labels = labels[:10000]
+
+
+sentences += FiQA_sentences
+labels+=FiQA_labels
+
+sentences,labels = shuffle_data(sentences,labels)
+
+
+
+
 
 train_sentences,dev_sentences,test_sentences = sentences[:int(len(sentences)*0.98)],sentences[int(len(sentences)*0.98):int(len(sentences)*0.99)],sentences[int(len(sentences)*0.99):]
 train_labels,dev_labels,test_labels = labels[:int(len(labels)*0.98)],labels[int(len(labels)*0.98):int(len(labels)*0.99)],labels[int(len(labels)*0.99):]
 
-# print(train_labels.count(0),dev_labels.count(0),test_labels.count(0))
-# print(train_labels.count(1),dev_labels.count(1),test_labels.count(1))
+
+print(labels.count(0))
+print(labels.count(1))
+
+print(train_labels.count(0),dev_labels.count(0),test_labels.count(0))
+print(train_labels.count(1),dev_labels.count(1),test_labels.count(1))
+
+print(len(train_sentences),len(dev_sentences),len(test_sentences))
+print(len(train_labels),len(dev_labels),len(test_labels))
 
 
 def write_to_file(filename,l1,l2):
