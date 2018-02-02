@@ -75,27 +75,26 @@ def clean_sentence(sentence):
     #removes links
     sentence = re.sub(r'(?P<url>https?://[^\s]+)', r'', sentence)
     # remove @usernames
-    sentence = re.sub(r"(?:\@|https?\://)\S+", "", sentence)
+    sentence = re.sub(r"\@(\w+)", "", sentence)
     #removing stock names to see if it helps
-    sentence = re.sub(r"(?:\$|https?\://)\S+", "", sentence)
+#     sentence = re.sub(r"(?:\$|https?\://)\S+", "", sentence)
     #remove # from #tags
     sentence = sentence.replace('#','')
     # split into tokens by white space
     tokens = sentence.split()
     # remove punctuation from each token
-    table = str.maketrans('', '', punctuation)
+    table = str.maketrans('', '', punctuation.replace('$',''))
     tokens = [w.translate(table) for w in tokens]
-    # remove remaining tokens that are not alphabetic
+#     remove remaining tokens that are not alphabetic
 #     tokens = [word for word in tokens if word.isalpha()]
 #no removing non alpha words to keep stock names($ZSL)
     # filter out stop words
-    stop_words = set(stopwords.words('english'))
+    stop_words = set(nltk.corpus.stopwords.words('english'))
     tokens = [w for w in tokens if not w in stop_words]
     # filter out short tokens
     tokens = [word for word in tokens if len(word) > 1]
     tokens = ' '.join(tokens)
     return tokens
-
 
 
 
@@ -309,7 +308,7 @@ para_epoch = Categorical(categories=[10,50,100,200,300,400,500],name='epoch')
 
 parameters = [para_learning_rate,para_dropout,para_n_dense,para_n_filters,para_filter_size_c1,para_filter_size_c2,para_filter_size_c3,para_em_c1,para_em_c2,para_em_c3,para_em_trainable_flag,para_free_em_dim,para_batch_size,para_epoch]
 
-default_parameters = [1e-4,0.5,100,100,2,4,6,'embedding_matrix_word2vec','embedding_matrix_glove','free',False,100,50,10]
+default_parameters = [1e-3,0.8,100,100,1,5,2,'embedding_matrix_word2vec','embedding_matrix_glove','embedding_matrix_fast_text',False,100,50,10]
 
 
 # ## Model
