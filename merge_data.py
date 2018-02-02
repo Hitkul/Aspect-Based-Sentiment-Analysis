@@ -1,23 +1,24 @@
 #script to merge FiQA dataset with Sentiment140 datset
 
 import csv
-import xml.etree.ElementTree as ET
+import json
 import codecs
 from random import shuffle
 
 #loading FiQA dataset
 def load_data_from_xml(filename):
-    tree = ET.parse(filename)
-    root = tree.getroot()
-    sentences = list()
-    score= list()
-    for row in root:
-        score.append(float(row[1].text))
-        sentences.append(row[2].text)
-
-    labels = [1 if x >= 0 else 0 for x in score]
+    with open(filename,'r') as f:
+        foo = json.load(f)
+    sentences = []
+    labels = []
+    for key in foo.keys():
+        sentences.append(foo[key]['sentence'])
+        labels.append(float(foo[key]['info'][0]['sentiment_score']))
+    
+    labels = [1 if x>=0 else 0 for x in labels]
     return sentences,labels
-FiQA_sentences,FiQA_labels = load_data_from_xml('dataset/financial_posts_ABSA_train.xml')
+
+FiQA_sentences,FiQA_labels = load_data_from_xml('dataset/master.json')
 
 #loading sentiment 140 dataset
 def load_data_from_csv(filename):
