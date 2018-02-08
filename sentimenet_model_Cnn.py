@@ -233,7 +233,7 @@ def define_model(length,n_dense,dropout,learning_rate,n_filters,filter_size_c1,f
     pool2 = MaxPooling1D(pool_size=2)(drop2)
     flat2 = Flatten()(pool2)
     # channel 3
-    if em_c1 == 'embedding_matrix_word2vec':
+    if em_c3 == 'embedding_matrix_word2vec':
         inputs3 = Input(shape=(length,300))
     else:
         inputs3 = Input(shape=(length,400))
