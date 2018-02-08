@@ -25,8 +25,8 @@ from keras.layers.convolutional import MaxPooling1D
 from keras.optimizers import Adam
 from keras.layers.merge import concatenate
 import keras.backend as K
-import matplotlib.pyplot as plt
-get_ipython().magic('matplotlib inline')
+# import matplotlib.pyplot as plt
+# get_ipython().magic('matplotlib inline')
 from scipy.interpolate import interp1d
 from sklearn.metrics import mean_squared_error
 from math import sqrt
