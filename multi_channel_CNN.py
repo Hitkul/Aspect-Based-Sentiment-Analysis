@@ -89,7 +89,7 @@ def clean_sentence(sentence):
 #     tokens = [word for word in tokens if word.isalpha()]
 #no removing non alpha words to keep stock names($ZSL)
     # filter out stop words
-    stop_words = set(nltk.corpus.stopwords.words('english'))
+    stop_words = set(stopwords.words('english'))
     tokens = [w for w in tokens if not w in stop_words]
     # filter out short tokens
     tokens = [word for word in tokens if len(word) > 1]
