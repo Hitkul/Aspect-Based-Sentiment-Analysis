@@ -1,11 +1,10 @@
-
 #multi channel CNN for sentiment analysis
 from nltk.corpus import stopwords
 from string import punctuation
 import pandas as pd
 import numpy as np
 import re
-import csv
+import json
 import codecs
 import word2vecReader as godin_embedding
 import pickle
@@ -41,21 +40,15 @@ from skopt.utils import use_named_args
 #loading data
 def load_data_from_file(filename):
     print("loading file = ",filename)
-    sentences = []
-    label = []
-    with codecs.open(filename, "r",encoding='utf-8', errors='ignore') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-        for row in spamreader:
-            try:
-                sentences.append(row[0])
-                label.append(row[1])
-            except:
-                print(row)
-    return sentences,label
+    with open(filename,'r') as f:
+        foo = json.load(f)
+    return foo['sentence'],foo['labels']
+
+    
 
 # sentences,score = load_data_from_xml('dataset/financial_posts_ABSA_train.xml')
-trainX,trainY = load_data_from_file('dataset/final_train.csv')
-devX,devY = load_data_from_file('dataset/final_dev.csv')
+trainX,trainY = load_data_from_file('dataset/final_train.json')
+devX,devY = load_data_from_file('dataset/final_dev.json')
 
 
 
