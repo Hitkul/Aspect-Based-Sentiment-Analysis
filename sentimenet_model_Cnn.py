@@ -194,15 +194,15 @@ para_em_c2 = Categorical(categories=['embedding_matrix_godin','embedding_matrix_
 para_em_c3 = Categorical(categories=['embedding_matrix_godin','embedding_matrix_word2vec'],name='em_c3')
 
 
-para_batch_size = Categorical(categories=[50,100,150],name='batch_size')
+para_batch_size = Categorical(categories=[8,16,32,64],name='batch_size')
 
 
-para_epoch = Categorical(categories=[10,50,100,200,300,400,500],name='epoch')
+para_epoch = Categorical(categories=[10,15,20,30],name='epoch')
 
 
 parameters = [para_learning_rate,para_dropout,para_n_dense,para_n_filters,para_filter_size_c1,para_filter_size_c2,para_filter_size_c3,para_em_c1,para_em_c2,para_em_c3,para_batch_size,para_epoch]
 
-default_parameters = [1e-4,0.5,100,100,2,4,6,'embedding_matrix_word2vec','embedding_matrix_godin','embedding_matrix_word2vec',50,10]
+default_parameters = [1e-4,0.5,100,100,2,4,6,'embedding_matrix_word2vec','embedding_matrix_godin','embedding_matrix_word2vec',16,10]
 
 
 def define_model(length,n_dense,dropout,learning_rate,n_filters,filter_size_c1,filter_size_c2,filter_size_c3,em_c1,em_c2,em_c3):
