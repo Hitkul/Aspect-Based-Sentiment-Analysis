@@ -50,18 +50,17 @@ def load_data_from_file(filename):
 trainX,trainY = load_data_from_file('dataset/final_train.json')
 devX,devY = load_data_from_file('dataset/final_dev.json')
 
-
-
+print('train data len')
 print(len(trainX),len(trainY))
 
-
+print('dev data len')
 print(len(devX),len(devY))
 
+print('train and dev count 1')
+print(trainY.count(1),devY.count(1))
 
-print(trainY.count('1'),devY.count('1'))
-
-
-print(trainY.count('0'),devY.count('0'))
+print('train and dev count 0')
+print(trainY.count(0),devY.count(0))
 
 
 # #only using subset of data for testing code
@@ -110,10 +109,11 @@ print('cleaning dev set')
 devX = [clean_sentence(x) for x in devX]
 # sentences
 
-print(len(trainX),len(trainY))
-print(len(devX),len(devY))
+# print(len(trainX),len(trainY))
+# print(len(devX),len(devY))
 
 #converting output matrix [-ve,+ve]
+
 devY = to_categorical(devY,2)
 trainY = to_categorical(trainY,2)
 
