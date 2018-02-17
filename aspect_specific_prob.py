@@ -8,53 +8,53 @@ import networkx as nx
 import spacy
 from math import exp
 
-def is_post(s):
-    if len(re.findall(r'\$([a-zA-Z_]+)',s))>0:
-        return True
-    return False
+# def is_post(s):
+#     if len(re.findall(r'\$([a-zA-Z_]+)',s))>0:
+#         return True
+#     return False
 
 
-def prepare_sentence(s):
-    sentences = nltk.sent_tokenize(s)
-    tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
-    tagged_sentences = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]
-    chunked_sentences = nltk.ne_chunk_sents(tagged_sentences, binary=True)
-    return chunked_sentences
-
-
-
-def extract_entity_names(t):
-    entity_names = []
-
-    if hasattr(t, 'label') and t.label:
-        if t.label() == 'NE':
-            entity_names.append(' '.join([child[0] for child in t]))
-        else:
-            for child in t:
-                entity_names.extend(extract_entity_names(child))
-    return entity_names
+# def prepare_sentence(s):
+#     sentences = nltk.sent_tokenize(s)
+#     tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
+#     tagged_sentences = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]
+#     chunked_sentences = nltk.ne_chunk_sents(tagged_sentences, binary=True)
+#     return chunked_sentences
 
 
 
+# def extract_entity_names(t):
+#     entity_names = []
 
-def get_ners(s):
-    chunked_sentences = prepare_sentence(s)
-    entity_names = []
-    for tree in chunked_sentences:
-        entity_names.extend(extract_entity_names(tree))
-    entity_names = [x.split()[0] for x in list(set(entity_names))]
-    return entity_names
+#     if hasattr(t, 'label') and t.label:
+#         if t.label() == 'NE':
+#             entity_names.append(' '.join([child[0] for child in t]))
+#         else:
+#             for child in t:
+#                 entity_names.extend(extract_entity_names(child))
+#     return entity_names
 
 
-def get_index_of_targets(s,is_post_flag = True):
-    if is_post_flag:
-        targets = ['$'+x for x in re.findall(r'\$([a-zA-Z_]+)',s)]
-        index = [i for i,j in enumerate(s.split()) if j in targets]
-        return index
-    else:
-        targets = get_ners(s)
-        index = [i for i,j in enumerate(s.split()) if j in targets]
-        return index
+
+
+# def get_ners(s):
+#     chunked_sentences = prepare_sentence(s)
+#     entity_names = []
+#     for tree in chunked_sentences:
+#         entity_names.extend(extract_entity_names(tree))
+#     entity_names = [x.split()[0] for x in list(set(entity_names))]
+#     return entity_names
+
+
+# def get_index_of_targets(s,is_post_flag = True):
+#     if is_post_flag:
+#         targets = ['$'+x for x in re.findall(r'\$([a-zA-Z_]+)',s)]
+#         index = [i for i,j in enumerate(s.split()) if j in targets]
+#         return index
+#     else:
+#         targets = get_ners(s)
+#         index = [i for i,j in enumerate(s.split()) if j in targets]
+#         return index
 
 
 def get_sentence_dependency_tree(s):
@@ -95,15 +95,15 @@ def get_distance_between_two_words(graph,node1,node1_index,node2,node2_index,dep
         return 10*depth 
 
 
-def get_sentence_tokens_prob(s):
+def get_sentence_tokens_prob(s,targets):
     s_prob_vectors = []
     tokens = s.split()
     prob_target = np.zeros(len(tokens))
-    if is_post(s):
-        target_index = get_index_of_targets(s)
-    else:
-        target_index = get_index_of_targets(s,is_post_flag=False)
-    
+    # if is_post(s):
+    #     target_index = get_index_of_targets(s)
+    # else:
+    #     target_index = get_index_of_targets(s,is_post_flag=False)
+    target_index = [tokens.index(t) for t in targets]
     if len(target_index) == 0:
         s_prob_vectors.append(np.zeros(len(tokens)))
         return s_prob_vectors
@@ -131,7 +131,16 @@ def renormalize_series(series):
     series_normalized = [(x-mean_series)/std_series for x in series]
     return [x+1 for x in series_normalized]
 
-def get_normalized_sentence_relation_vector(s):
-    sentence_relation_vector = get_sentence_tokens_prob(s)
+def get_normalized_sentence_relation_vector(s,targets):
+    sentence_relation_vector = get_sentence_tokens_prob(s,targets)
     sentence_relation_vector = [renormalize_series(x) for x in sentence_relation_vector]
     return sentence_relation_vector
+
+s = "Interest Heats Up for @Yahoo YHOO - The Wall Street Journal  https://t.co/j5jVjI9bia"
+target = ['YHOO']
+target_ = []
+for t in target:
+    target_.append(t.split()[0])
+
+# print(target_)
+# print(get_normalized_sentence_relation_vector(s,target_))
