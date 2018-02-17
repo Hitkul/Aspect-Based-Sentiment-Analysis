@@ -96,6 +96,10 @@ def get_distance_between_two_words(graph,node1,node1_index,node2,node2_index,dep
 
 
 def get_sentence_tokens_prob(s,targets):
+    target_ = []
+    for t in targets:
+        target_.append(t.split()[0])
+    targets = target_
     s_prob_vectors = []
     tokens = s.split()
     prob_target = np.zeros(len(tokens))
@@ -136,11 +140,10 @@ def get_normalized_sentence_relation_vector(s,targets):
     sentence_relation_vector = [renormalize_series(x) for x in sentence_relation_vector]
     return sentence_relation_vector
 
-s = "Interest Heats Up for @Yahoo YHOO - The Wall Street Journal  https://t.co/j5jVjI9bia"
-target = ['YHOO']
-target_ = []
-for t in target:
-    target_.append(t.split()[0])
-
-# print(target_)
-# print(get_normalized_sentence_relation_vector(s,target_))
+if __name__ == '__main__':
+    s = "Interest Heats Up for @Yahoo YHOO - The Wall Street Journal  https://t.co/j5jVjI9bia"
+    target = ['YHOO']
+    target_ = []
+    for t in target:
+        target_.append(t.split()[0])
+    print(get_normalized_sentence_relation_vector(s,target_))
